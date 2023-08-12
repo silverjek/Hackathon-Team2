@@ -71,7 +71,7 @@ class CommentListView(views.APIView):
         mediinfo = get_object_or_404(Medi_Info, pk=second_pk)
         comments=Info_Comment.objects.filter(originPost=mediinfo, user_id=user, parent=None)
         serializer= InfoCommentSerializer(comments, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK) 
 
     
 class AddCommentView(views.APIView): 
