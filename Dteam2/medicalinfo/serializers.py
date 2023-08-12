@@ -26,3 +26,8 @@ class MediInfoSerializer(serializers.ModelSerializer):
                   'patAddress','patSSN','patBlood','patRH',
                   'patHeight','patWeight','patPhone','updateDate',
                   'caution', 'fam_history', 'guardian']
+        
+class InfoCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Info_Comment
+        fields = '__all__'
