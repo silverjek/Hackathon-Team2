@@ -85,8 +85,8 @@ class AddCommentView(views.APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class UpadteCommentView(views.APIView):            
-     def get(self,request,pk,format=None):
+class UpadteCommentView(views.APIView):
+     def get(self,request,pk,format=None): #본인이 작성한 내용 불러오기
         comments=get_object_or_404(Info_Comment, pk=pk)
         serializer= InfoCommentSerializer(comments)
         return Response(serializer.data)

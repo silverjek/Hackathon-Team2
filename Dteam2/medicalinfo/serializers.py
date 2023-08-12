@@ -29,6 +29,7 @@ class MediInfoSerializer(serializers.ModelSerializer):
         
 class InfoCommentSerializer(serializers.ModelSerializer):
     replies = serializers.SerializerMethodField()
+    
     class Meta:
         model = Info_Comment
         fields = ['id','user_id','user_name','user_type','originPost','parent',
