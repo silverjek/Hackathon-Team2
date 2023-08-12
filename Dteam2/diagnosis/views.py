@@ -63,7 +63,7 @@ class AddCommentView(views.APIView):
 
 
 
-class UpadteCommentView(views.APIView):
+class UpdateCommentView(views.APIView):
      def get(self,request,pk,format=None):
         comments=get_object_or_404(Diag_Comment, pk=pk)
         serializer= DiagCommentSerializer(comments)

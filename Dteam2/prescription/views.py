@@ -72,7 +72,7 @@ class AddCommentView(views.APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class UpadteCommentView(views.APIView):
+class UpdateCommentView(views.APIView):
     def get(self,request,pk,format=None):
         comments=get_object_or_404(Pre_Comment, pk=pk)
         serializer= PreCommentSerializer(comments)
