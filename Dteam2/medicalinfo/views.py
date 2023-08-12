@@ -1,8 +1,9 @@
 from django.shortcuts import render, get_object_or_404
-from rest_framework import views
+from rest_framework import views, status
 from rest_framework.response import Response
 from .models import *
 from .serializers import *
+from account.models import *
 
 # Create your views here.
 
@@ -68,12 +69,20 @@ class CommentListView(views.APIView):
     def get(self,request,first_pk,second_pk,format=None):
         user = get_object_or_404(User, pk=first_pk)
         mediinfo = get_object_or_404(Medi_Info, pk=second_pk)
-        comments=Info_Comment.objects.filter(originPost=second_pk)
+        comments=Info_Comment.objects.filter(originPost=mediinfo, parent=None)
         serializer= InfoCommentSerializer(comments, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     
 class AddCommentView(views.APIView):
+    '''
+    if User.userType == 'False': #유저가 의사인 경우, 환자의 원댓글 불러오기 pk 확인 필요
+        def get(self,request,pk,format=None):
+            comments=get_object_or_404(Info_Comment, pk=pk)
+            serializer= InfoCommentSerializer(comments)
+            return Response(serializer.data)
+    '''
+            
     def post(self,request,format=None):
         serializer = InfoCommentSerializer(data=request.data)
         if serializer.is_valid():
@@ -83,6 +92,14 @@ class AddCommentView(views.APIView):
 
 
 class UpadteCommentView(views.APIView):
+     '''
+     if User.userType == 'False': #유저가 의사인 경우, 환자의 원댓글 불러오기 pk 확인 필요
+        def get(self,request,pk,format=None):
+            comments=get_object_or_404(Info_Comment, pk=pk)
+            serializer= InfoCommentSerializer(comments)
+            return Response(serializer.data)
+    '''
+            
      def get(self,request,pk,format=None):
         comments=get_object_or_404(Info_Comment, pk=pk)
         serializer= InfoCommentSerializer(comments)

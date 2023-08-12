@@ -40,6 +40,6 @@ class Pre_Comment(models.Model):
     comDate = models.DateTimeField(auto_now_add=True)
 
     CATEGORY_CHOICES=(
-        ('INFO','의료 정보'),
+        ('PRE','처방 내역'),
     )
     comCategory = models.CharField(max_length=4, choices=CATEGORY_CHOICES)
