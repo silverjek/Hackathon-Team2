@@ -13,3 +13,17 @@ class PrescriptionSerializer(serializers.ModelSerializer):
         fields = ['user_id','info_id','diag_id','prePharm',
                   'preAddress','preDate','preChem','updateDate',
                   'medication']
+
+class PreCommentSerializer(serializers.ModelSerializer):
+    replies = serializers.SerializerMethodField()
+    class Meta:
+        model = Pre_Comment
+        fields = ['id','user_id','originPost','parent',
+                  'comTitle','comContent','comDate','comCategory',
+                  'replies']
+
+    def get_replies(self, instance):
+        replies = instance.replies.all()  # Get all related replies
+        serializer = self.__class__(replies, many=True)
+        serializer.bind('', self)
+        return serializer.data

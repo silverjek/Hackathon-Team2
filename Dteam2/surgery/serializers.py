@@ -15,3 +15,17 @@ class SurgerySerializer(serializers.ModelSerializer):
                   'surAnes','surEvent','surRemoval','surBloodTrans',
                   'surPre','surDur','surPost','surTube',
                   'diagnosis','mediinfo']
+        
+class SurCommentSerializer(serializers.ModelSerializer):
+    replies = serializers.SerializerMethodField()
+    class Meta:
+        model = Sur_Comment
+        fields = ['id','user_id','originPost','parent',
+                  'comTitle','comContent','comDate','comCategory',
+                  'replies']
+
+    def get_replies(self, instance):
+        replies = instance.replies.all()  # Get all related replies
+        serializer = self.__class__(replies, many=True)
+        serializer.bind('', self)
+        return serializer.data

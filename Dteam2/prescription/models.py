@@ -28,3 +28,19 @@ class Medication(models.Model):
     mediAmount = models.CharField(max_length=50)
     mediCount = models.CharField(max_length=50)
     mediPeriod = models.CharField(max_length=50)
+
+class Pre_Comment(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    originPost = models.ForeignKey(Prescription, on_delete=models.CASCADE)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, related_name='replies')
+    #user_type = models.ForeignKey(User.userType, on_delete=models.CASCADE)
+    #user_name = models.ForeignKey(User.username, on_delete=models.CASCADE) 이름 어케 받을지 유저 모델과 함께 생각해보기
+    
+    comTitle = models.CharField(max_length=50)
+    comContent = models.TextField()
+    comDate = models.DateTimeField(auto_now_add=True)
+
+    CATEGORY_CHOICES=(
+        ('PRE','처방 내역'),
+    )
+    comCategory = models.CharField(max_length=4, choices=CATEGORY_CHOICES)

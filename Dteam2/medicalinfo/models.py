@@ -61,3 +61,26 @@ class Guardian(models.Model):
     guaName = models.CharField(max_length=20)
     guaRelation = models.CharField(max_length=100)
     guaPhone = PhoneNumberField(unique=True, null=False, blank=False)
+
+class Info_Comment(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    originPost = models.ForeignKey(Medi_Info, on_delete=models.CASCADE)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, related_name='replies')
+    #user_type = models.ForeignKey(User.userType, on_delete=models.CASCADE)
+    #user_name = models.ForeignKey(User.username, on_delete=models.CASCADE) 이름 어케 받을지 유저 모델과 함께 생각해보기
+    
+    comTitle = models.CharField(max_length=50)
+    comContent = models.TextField()
+    comDate = models.DateTimeField(auto_now_add=True)
+
+    CATEGORY_CHOICES=(
+        ('INFO','의료 정보'),
+    )
+    comCategory = models.CharField(max_length=4, choices=CATEGORY_CHOICES)
+
+
+    def user_name(self):
+        return self.user_id.userFullName
+
+    def user_type(self):
+        return self.user_id.userType
