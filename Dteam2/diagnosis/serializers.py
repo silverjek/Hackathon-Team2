@@ -10,7 +10,7 @@ class DiagCommentSerializer(serializers.ModelSerializer):
     replies = serializers.SerializerMethodField()
     class Meta:
         model = Diag_Comment
-        fields = ['user_id','originPost','parent',
+        fields = ['id','user_id','originPost','parent',
                   'comTitle','comContent','comDate','comCategory',
                   'replies']
 

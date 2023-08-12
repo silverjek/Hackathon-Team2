@@ -47,18 +47,22 @@ class CommentListView(views.APIView):
     def get(self,request,first_pk,second_pk,format=None):
         user = get_object_or_404(User, pk=first_pk)
         surgery = get_object_or_404(Surgery, pk=second_pk)
-        comments=Sur_Comment.objects.filter(originPost=surgery, parent=None)
+        comments=Sur_Comment.objects.filter(originPost=surgery, user_id=user, parent=None)
         serializer= SurCommentSerializer(comments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     
 class AddCommentView(views.APIView):
-    def post(self,request,format=None):
-        serializer = SurCommentSerializer(data=request.data)
+    def post(self, request, format=None):
+        data = request.data.copy()  
+        data['user_id'] = request.user.id
+        serializer = SurCommentSerializer(data=data)
+        
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class UpadteCommentView(views.APIView):
@@ -69,11 +73,20 @@ class UpadteCommentView(views.APIView):
      
      def put(self, request, pk, format=None):
         comment = get_object_or_404(Sur_Comment, pk=pk)
-        serializer = SurCommentSerializer(comment, data=request.data)
+        
+        #댓글 작성자와 접근자의 아이디가 같은지 확인
+        if comment.user_id != request.user:
+            return Response({'error': '이 댓글을 수정할 수 있는 권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
+        
+        data = request.data.copy()
+        data['user_id'] = request.user.id
+        serializer = SurCommentSerializer(comment, data=data)
+        
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        return Response(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class DeleteCommentView(views.APIView):
     def get(self,request,pk,format=None):
@@ -83,5 +96,10 @@ class DeleteCommentView(views.APIView):
     
     def delete(self, request, pk, format=None):
         comment = get_object_or_404(Sur_Comment, pk=pk)
+        
+        #댓글 작성자와 접근자의 아이디가 같은지 확인
+        if comment.user_id != request.user:
+            return Response({'error': '이 댓글을 삭제할 수 있는 권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
+        
         comment.delete()
-        return Response({"message":"댓글 삭제 성공"})
+        return Response({"message": "댓글 삭제 성공"})

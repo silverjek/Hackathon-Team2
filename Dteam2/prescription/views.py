@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework import views, status
 from rest_framework.response import Response
-from .models import *
+from .models import * 
 from .serializers import *
 from medicalinfo.serializers import *
 
@@ -56,33 +56,44 @@ class CommentListView(views.APIView):
     def get(self,request,first_pk,second_pk,format=None):
         user = get_object_or_404(User, pk=first_pk)
         prescription = get_object_or_404(Prescription, pk=second_pk)
-        comments=Pre_Comment.objects.filter(originPost=prescription, parent=None)
+        comments=Pre_Comment.objects.filter(originPost=prescription, user_id=user, parent=None)
         serializer= PreCommentSerializer(comments, many=True)
         return Response(serializer.data)
 
     
 class AddCommentView(views.APIView):
-    def post(self,request,format=None):
-        serializer = PreCommentSerializer(data=request.data)
+    def post(self, request, format=None):
+        data = request.data.copy()  
+        data['user_id'] = request.user.id
+        serializer = PreCommentSerializer(data=data)
+        
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors)
-
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UpadteCommentView(views.APIView):
-     def get(self,request,pk,format=None):
+    def get(self,request,pk,format=None):
         comments=get_object_or_404(Pre_Comment, pk=pk)
         serializer= PreCommentSerializer(comments)
         return Response(serializer.data)
      
-     def put(self, request, pk, format=None):
+    def put(self, request, pk, format=None):
         comment = get_object_or_404(Pre_Comment, pk=pk)
-        serializer = PreCommentSerializer(comment, data=request.data)
+        
+        #댓글 작성자와 접근자의 아이디가 같은지 확인
+        if comment.user_id != request.user:
+            return Response({'error': '이 댓글을 수정할 수 있는 권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
+        
+        data = request.data.copy()
+        data['user_id'] = request.user.id
+        serializer = PreCommentSerializer(comment, data=data)
+        
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        return Response(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class DeleteCommentView(views.APIView):
     def get(self,request,pk,format=None):
@@ -92,5 +103,10 @@ class DeleteCommentView(views.APIView):
     
     def delete(self, request, pk, format=None):
         comment = get_object_or_404(Pre_Comment, pk=pk)
+        
+        #댓글 작성자와 접근자의 아이디가 같은지 확인
+        if comment.user_id != request.user:
+            return Response({'error': '이 댓글을 삭제할 수 있는 권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
+        
         comment.delete()
-        return Response({"message":"댓글 삭제 성공"})
+        return Response({"message": "댓글 삭제 성공"})
