@@ -70,9 +70,9 @@ class Info_Comment(models.Model):
     
     comTitle = models.CharField(max_length=50)
     comContent = models.TextField()
-    comDate = models.DateField(auto_now_add=True)
+    comDate = models.DateTimeField(auto_now_add=True)
 
     CATEGORY_CHOICES=(
-        ('DIAG','진단 내역'),
+        ('INFO','의료 정보'),
     )
     comCategory = models.CharField(max_length=4, choices=CATEGORY_CHOICES)

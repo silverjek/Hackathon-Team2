@@ -13,3 +13,8 @@ class PrescriptionSerializer(serializers.ModelSerializer):
         fields = ['user_id','info_id','diag_id','prePharm',
                   'preAddress','preDate','preChem','updateDate',
                   'medication']
+
+class PreCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Pre_Comment
+        fields = '__all__'

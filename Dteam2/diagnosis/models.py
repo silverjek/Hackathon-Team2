@@ -22,3 +22,18 @@ class Diagnosis(models.Model):
     diagUSage = models.CharField(max_length=50, blank=True, null=True)
     diagETC = models.TextField(null=False, blank=False, default='') 
     updateDate = models.DateTimeField(auto_now_add=True)
+
+class Diag_Comment(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    originPost = models.ForeignKey(Diagnosis, on_delete=models.CASCADE)
+    #user_type = models.ForeignKey(User.userType, on_delete=models.CASCADE)
+    #user_name = models.ForeignKey(User.username, on_delete=models.CASCADE) 이름 어케 받을지 유저 모델과 함께 생각해보기
+    
+    comTitle = models.CharField(max_length=50)
+    comContent = models.TextField()
+    comDate = models.DateTimeField(auto_now_add=True)
+
+    CATEGORY_CHOICES=(
+        ('DIAG','진단 내역'),
+    )
+    comCategory = models.CharField(max_length=4, choices=CATEGORY_CHOICES)

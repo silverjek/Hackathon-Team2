@@ -51,3 +51,46 @@ class PrescriptionDetailView(views.APIView):
         }
 
         return Response(combined_data)
+    
+class CommentListView(views.APIView):
+    def get(self,request,first_pk,second_pk,format=None):
+        user = get_object_or_404(User, pk=first_pk)
+        prescription = get_object_or_404(Prescription, pk=second_pk)
+        comments=Pre_Comment.objects.filter(originPost=second_pk)
+        serializer= PreCommentSerializer(comments, many=True)
+        return Response(serializer.data)
+
+    
+class AddCommentView(views.APIView):
+    def post(self,request,format=None):
+        serializer = PreCommentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
+
+
+class UpadteCommentView(views.APIView):
+     def get(self,request,pk,format=None):
+        comments=get_object_or_404(Pre_Comment, pk=pk)
+        serializer= PreCommentSerializer(comments)
+        return Response(serializer.data)
+     
+     def put(self, request, pk, format=None):
+        comment = get_object_or_404(Pre_Comment, pk=pk)
+        serializer = PreCommentSerializer(comment, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
+
+class DeleteCommentView(views.APIView):
+    def get(self,request,pk,format=None):
+        comments=get_object_or_404(Pre_Comment, pk=pk)
+        serializer= PreCommentSerializer(comments)
+        return Response(serializer.data)
+    
+    def delete(self, request, pk, format=None):
+        comment = get_object_or_404(Pre_Comment, pk=pk)
+        comment.delete()
+        return Response({"message":"댓글 삭제 성공"})

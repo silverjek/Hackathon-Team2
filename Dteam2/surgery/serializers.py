@@ -15,3 +15,8 @@ class SurgerySerializer(serializers.ModelSerializer):
                   'surAnes','surEvent','surRemoval','surBloodTrans',
                   'surPre','surDur','surPost','surTube',
                   'diagnosis','mediinfo']
+        
+class SurCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sur_Comment
+        fields = '__all__'
