@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from rest_framework import views
+from rest_framework import views, status
 from rest_framework.response import Response
 from .models import *
 from .serializers import *
@@ -56,7 +56,7 @@ class CommentListView(views.APIView):
     def get(self,request,first_pk,second_pk,format=None):
         user = get_object_or_404(User, pk=first_pk)
         prescription = get_object_or_404(Prescription, pk=second_pk)
-        comments=Pre_Comment.objects.filter(originPost=second_pk)
+        comments=Pre_Comment.objects.filter(originPost=prescription, parent=None)
         serializer= PreCommentSerializer(comments, many=True)
         return Response(serializer.data)
 

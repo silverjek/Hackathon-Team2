@@ -7,7 +7,16 @@ class DiagnosisSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class DiagCommentSerializer(serializers.ModelSerializer):
+    replies = serializers.SerializerMethodField()
     class Meta:
         model = Diag_Comment
-        fields = '__all__'
+        fields = ['user_id','originPost','parent',
+                  'comTitle','comContent','comDate','comCategory',
+                  'replies']
+
+    def get_replies(self, instance):
+        replies = instance.replies.all()  # Get all related replies
+        serializer = self.__class__(replies, many=True)
+        serializer.bind('', self)
+        return serializer.data
 

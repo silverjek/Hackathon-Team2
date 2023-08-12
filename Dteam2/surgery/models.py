@@ -35,6 +35,7 @@ class Surgery(models.Model) :
 class Sur_Comment(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     originPost = models.ForeignKey(Surgery, on_delete=models.CASCADE)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, related_name='replies')
     #user_type = models.ForeignKey(User.userType, on_delete=models.CASCADE)
     #user_name = models.ForeignKey(User.username, on_delete=models.CASCADE) 이름 어케 받을지 유저 모델과 함께 생각해보기
     
