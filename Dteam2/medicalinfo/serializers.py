@@ -31,7 +31,7 @@ class InfoCommentSerializer(serializers.ModelSerializer):
     replies = serializers.SerializerMethodField()
     class Meta:
         model = Info_Comment
-        fields = ['id','user_id','originPost','parent',
+        fields = ['id','user_id','user_name','user_type','originPost','parent',
                   'comTitle','comContent','comDate','comCategory',
                   'replies']
         

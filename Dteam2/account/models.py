@@ -7,3 +7,10 @@ class User(AbstractUser):
     username = models.CharField(max_length=20, unique=True)
     password = models.CharField(max_length=20) 
     userType = models.BooleanField(default=True) #True-일반사용자 / False-의료인사용자
+    userFullName = models.CharField(max_length=20)
+    SEX_CHOICES = (
+        ('MALE','Male'),
+        ('FEMALE','Female')
+    )
+    userSex = models.CharField(max_length=6, choices=SEX_CHOICES)
+    userAge = models.IntegerField()

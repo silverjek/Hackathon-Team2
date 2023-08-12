@@ -77,3 +77,10 @@ class Info_Comment(models.Model):
         ('INFO','의료 정보'),
     )
     comCategory = models.CharField(max_length=4, choices=CATEGORY_CHOICES)
+
+
+    def user_name(self):
+        return self.user_id.userFullName
+
+    def user_type(self):
+        return self.user_id.userType
