@@ -84,6 +84,12 @@ class AddCommentView(views.APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def get(self,request,pk,format=None): #의사의 경우
+        comment=get_object_or_404(Info_Comment, pk=pk)
+        if comment.user_type==False and comment.parent is not None:
+            serializer= InfoCommentSerializer(comment)
+            return Response(serializer.data)
 
 class UpdateCommentView(views.APIView):
      def get(self,request,pk,format=None): #본인이 작성한 내용 불러오기
@@ -122,3 +128,33 @@ class DeleteCommentView(views.APIView):
         
         comment.delete()
         return Response({"message": "댓글 삭제 성공"})
+    
+
+class DOC_AddCommentView(views.APIView): 
+    def post(self, request, pk, format=None):
+        data = request.data.copy()  
+        data['user_id'] = request.user.id
+        data['parent'] = pk
+        serializer = InfoCommentSerializer(data=data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def get(self,request,pk,format=None): #원본 댓글 불러오기
+        parent=get_object_or_404(Info_Comment, pk=pk)
+        serializer= InfoCommentSerializer(parent)
+        return Response(serializer.data)
+
+'''
+        mediinfo = get_object_or_404(Medi_Info, pk=pk)  # Medi_info 모델 pk
+        cautions = Caution.objects.filter(info_id=pk)
+        famhistories = Fam_History.objects.filter(info_id=pk)
+        guardians = Guardian.objects.filter(info_id=pk)
+
+        medi_serializer = MediInfoSerializer(mediinfo)
+        cau_serializers = [CautionSerializer(caution) for caution in cautions]
+        fam_serializers = [FamHisSerializer(famhistory) for famhistory in famhistories]
+        gua_serializers = [GuardianSerializer(guardian) for guardian in guardians]
+        '''

@@ -11,6 +11,7 @@ urlpatterns=[
     path('access/<int:pk>/', MediInfoDetailView.as_view()),
     path('comment/<int:first_pk>/<int:second_pk>/', CommentListView.as_view()),
     path('comment/write/', AddCommentView.as_view()),
+    path('comment/reply/write/<int:pk>', DOC_AddCommentView.as_view()),
     path('comment/update/<int:pk>/', UpdateCommentView.as_view()),
     path('comment/delete/<int:pk>/', DeleteCommentView.as_view()),
 ]
