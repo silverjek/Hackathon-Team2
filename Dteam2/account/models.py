@@ -14,3 +14,4 @@ class User(AbstractUser):
     )
     userSex = models.CharField(max_length=6, choices=SEX_CHOICES)
     userAge = models.IntegerField()
+    latestUpdate = models.DateTimeField(blank=True, null=True)
