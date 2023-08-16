@@ -73,7 +73,6 @@ class CommentListView(views.APIView):
         serializer= InfoCommentSerializer(comments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK) 
 
-    
 class AddCommentView(views.APIView): 
     def post(self, request, format=None):
         data = request.data.copy()  
@@ -122,3 +121,50 @@ class DeleteCommentView(views.APIView):
         
         comment.delete()
         return Response({"message": "댓글 삭제 성공"})
+    
+
+class DOC_AddCommentView(views.APIView): 
+    def post(self, request, pk, format=None):
+        data = request.data.copy()  
+        data['user_id'] = request.user.id
+        data['parent'] = pk
+        serializer = InfoCommentSerializer(data=data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def get(self,request,pk,format=None): #원본 댓글 불러오기
+        parent=get_object_or_404(Info_Comment, pk=pk)
+        serializer= InfoCommentSerializer(parent)
+        return Response(serializer.data)
+
+class DOC_UpdateCommentView(views.APIView):
+    def get(self,request,pk,format=None): #본인이 작성한 내용 불러오기
+        comments=get_object_or_404(Info_Comment, pk=pk) #수정할 대댓글
+        serializer= InfoCommentSerializer(comments)
+
+        parent_comment = comments.parent
+        combined_data = {
+            'parent': InfoCommentSerializer(parent_comment).data,
+            'comment': serializer.data
+        }
+        
+        return Response(combined_data)
+    
+    def put(self, request, pk, format=None):
+        comment = get_object_or_404(Info_Comment, pk=pk)
+        
+        #댓글 작성자와 접근자의 아이디가 같은지 확인
+        if comment.user_id != request.user:
+            return Response({'error': '이 댓글을 수정할 수 있는 권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
+        
+        data = request.data.copy()
+        data['user_id'] = request.user.id
+        serializer = InfoCommentSerializer(comment, data=data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

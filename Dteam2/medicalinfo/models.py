@@ -78,7 +78,6 @@ class Info_Comment(models.Model):
     )
     comCategory = models.CharField(max_length=4, choices=CATEGORY_CHOICES)
 
-
     def user_name(self):
         return self.user_id.userFullName
 
