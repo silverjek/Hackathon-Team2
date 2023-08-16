@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'diagnosis',
     'prescription',
     'surgery',
+    'landing',
+    'mypage',
 ]
 
 MIDDLEWARE = [
