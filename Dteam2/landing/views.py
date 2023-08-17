@@ -27,9 +27,16 @@ class PAT_NFTListView(views.APIView):
 #의사가 환자 NFT 접근 시 페이지        
 class DOC_NFTDetailView(views.APIView):
     def get(self, request, pk, format=None):
-        nftDetails=Medi_Info.objects.filter(pk=pk) #info_id=pk 아님
-        serializer=MediInfoSerializer(nftDetails, many=True)
-        return Response(serializer.data)
+        nftDetails = Medi_Info.objects.filter(pk=pk) # info_id=pk 아님
+        user = User.objects.get(pk=pk)
+        
+        data = {
+            "latestUpdate": user.latestUpdate,
+            "patName": nftDetails[0].patName if nftDetails else None
+        }
+        
+        return Response(data)
+
 
 #갱신기록    
 

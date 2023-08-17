@@ -18,6 +18,20 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
+    
+    def validate_username(self, value):
+        if User.objects.filter(username=value).exists():
+            raise serializers.ValidationError("해당 아이디는 이미 존재합니다.")
+        if len(value) > User._meta.get_field('username').max_length:
+            raise serializers.ValidationError("아이디는 최대 20자 이내로 설정해야합니다.")
+        return value
+    def validate_password(self, value):
+        min_password_length = 8
+        max_password_length = 20
+
+        if len(value) < min_password_length or len(value) > max_password_length:
+            raise serializers.ValidationError("비밀번호는 최소 8자 최대 20자로 설정해야합니다.".format(min_password_length, max_password_length))
+        return value
 
 class UserLoginSerializer(serializers.Serializer):
     username=serializers.CharField(max_length=20)
@@ -37,3 +51,13 @@ class UserLoginSerializer(serializers.Serializer):
                 return user
             
         raise serializers.ValidationError("User does not exist")
+    
+class LogoutSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=20)
+    # 다른 필드들도 추가할 수 있음
+
+    def logout(self, request):
+        # 로그아웃 로직을 구현합니다.
+        # 세션 무효화 등의 처리를 할 수 있습니다.
+        # 이 예시에서는 아무 작업도 하지 않음
+        pass
