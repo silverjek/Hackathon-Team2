@@ -5,4 +5,5 @@ app_name='mypage'
 
 urlpatterns=[
     path('<int:pk>/', myPageView.as_view()),
+    path('<int:pk>/QAlist/', myQAListView.as_view()),
 ]

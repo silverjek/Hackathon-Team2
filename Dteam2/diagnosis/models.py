@@ -20,10 +20,11 @@ class Diagnosis(models.Model):
     diagIn = models.DateField()
     diagOut = models.DateField()
     diagUSage = models.CharField(max_length=50, blank=True, null=True)
-    diagETC = models.TextField(null=False, blank=False, default='')
-    diagHospital = models.CharField(max_length=50, default="병원명")
-    diagDoc = models.CharField(max_length=20, default="의사이름")
+    diagETC = models.TextField(null=False, blank=False, default='') 
     updateDate = models.DateTimeField(auto_now_add=True)
+    diagHospital = models.CharField(max_length=50, default='멋사 병원')  #진단 병원명
+    diagDoc =  models.CharField(max_length=50, default='김멋사')        #진단 의사명
+    diagDocMaj=models.CharField(max_length=50, default='외과 전문의')   #진단 의사 전공
 
 class Diag_Comment(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)

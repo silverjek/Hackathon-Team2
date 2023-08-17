@@ -14,6 +14,9 @@ class Prescription(models.Model):
     preDate = models.DateField()
     preChem = models.CharField(max_length=20)
     updateDate = models.DateTimeField(auto_now_add=True)
+    preDoc=models.CharField(max_length=50, default='김멋사')            #처방 의사명
+    preDocMaj=models.CharField(max_length=50, default='외과 전문의')    #처방 의사 전공
+    preHospital=models.CharField(max_length=50, default='멋사 병원')    #처방 병원명
 
 class Medication(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)

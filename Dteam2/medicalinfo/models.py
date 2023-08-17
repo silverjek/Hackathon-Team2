@@ -31,6 +31,9 @@ class Medi_Info(models.Model):
     patWeight = models.FloatField()
     patPhone = PhoneNumberField(unique=True, null=False, blank=False)
     updateDate = models.DateTimeField(auto_now_add=True)
+    doc=models.CharField(max_length=50, default='김멋사')           #갱신(수정)한 의사명
+    docMaj=models.CharField(max_length=50, default='외과 전문의')     #갱신(수정)한 의사 전공
+    Hospital=models.CharField(max_length=50, default='멋사 병원')      #갱신(수정)한 병원명
 
 
 class Caution(models.Model):

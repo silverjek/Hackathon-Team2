@@ -13,8 +13,8 @@ class SurgerySerializer(serializers.ModelSerializer):
                   'surField','surOper','surAssi','surAnesDoc',
                   'surName','surCode','surPreDiag','surPostDiag',
                   'surAnes','surEvent','surRemoval','surBloodTrans',
-                  'surPre','surDur','surPost','surTube','updateDate',
-                  'diagnosis','mediinfo']
+                  'surPre','surDur','surPost','surTube',
+                  'diagnosis','mediinfo', 'updateDate', 'surDocMaj']
         
 class SurCommentSerializer(serializers.ModelSerializer):
     replies = serializers.SerializerMethodField()

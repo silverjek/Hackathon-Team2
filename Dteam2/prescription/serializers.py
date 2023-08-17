@@ -10,9 +10,9 @@ class PrescriptionSerializer(serializers.ModelSerializer):
     medication = MedicationSerializer(many=True, read_only=True)
     class Meta:
         model = Prescription
-        fields = ['id','info_id','diag_id','prePharm',
+        fields = ['user_id','info_id','diag_id','prePharm',
                   'preAddress','preDate','preChem','updateDate',
-                  'medication']
+                  'medication', 'preDoc', 'preDocMaj','preHospital']
 
 class PreCommentSerializer(serializers.ModelSerializer):
     replies = serializers.SerializerMethodField()
