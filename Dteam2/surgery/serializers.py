@@ -8,8 +8,8 @@ class SurgerySerializer(serializers.ModelSerializer):
     mediinfo = MediInfoSerializer(many=True, read_only=True)
     class Meta:
         model = Surgery
-        fields = ['id','user_id','info_id','diag_id','surChartNum',
-                  'surWriter','surDate','surNum','surHospital',
+        fields = ['id','user_id','info_id','diag_id','diagDate','surChartNum','surRegi',
+                  'surCount','surWriter','surDate','surNum','surHospital',
                   'surField','surOper','surAssi','surAnesDoc',
                   'surName','surCode','surPreDiag','surPostDiag',
                   'surAnes','surEvent','surRemoval','surBloodTrans',
