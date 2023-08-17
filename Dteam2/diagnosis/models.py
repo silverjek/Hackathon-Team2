@@ -10,6 +10,8 @@ class Diagnosis(models.Model):
     diagDate = models.DateField()
     diagRegi = models.CharField(max_length=50)
     diagNum = models.CharField(max_length=50)
+    diagChart = models.CharField(max_length=50, default='')
+    diagCount = models.IntegerField(default=1) #n번째 방문
     diagMajor = models.CharField(max_length=100)
     diagMajCode = models.CharField(max_length=100)
     diagTF = models.BooleanField(default=False) #False-임상적 추정 / True-최종 진단
@@ -23,8 +25,11 @@ class Diagnosis(models.Model):
     diagETC = models.TextField(null=False, blank=False, default='') 
     updateDate = models.DateTimeField(auto_now_add=True)
     diagHospital = models.CharField(max_length=50, default='멋사 병원')  #진단 병원명
+    diagHosType = models.CharField(max_length=30, default='의원')
+    diagHosAddrss = models.CharField(max_length=300, default='')
     diagDoc =  models.CharField(max_length=50, default='김멋사')        #진단 의사명
-    diagDocMaj=models.CharField(max_length=50, default='외과 전문의')   #진단 의사 전공
+    diagDocMaj = models.CharField(max_length=50, default='외과 전문의')   #진단 의사 전공
+    diagLtVisit = models.DateField(null=True,blank=True)
 
 class Diag_Comment(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)

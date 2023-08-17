@@ -13,6 +13,7 @@ class Medi_Info(models.Model):
     )
     patSex = models.CharField(max_length=6, choices=SEX_CHOICES)
     patBirth = models.DateField()
+    patAge = models.IntegerField(default=0)
     patAddress = models.CharField(max_length=200)
     patSSN = models.CharField(max_length=14)
     BLOOD_CHOICES=(
@@ -46,7 +47,8 @@ class Caution(models.Model):
     )
     cauLevel = models.CharField(max_length=10, choices=LEVEL_CHOICES)
     cauName = models.CharField(max_length=300)
-    cauType = models.CharField(max_length=300)
+    cauIngName = models.CharField(max_length=300, default='')
+    cauIngType = models.CharField(max_length=300, default='')
     cauSymptom = models.CharField(max_length=300)
 
 class Fam_History(models.Model):

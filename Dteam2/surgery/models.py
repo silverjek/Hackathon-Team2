@@ -9,7 +9,11 @@ class Surgery(models.Model) :
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     info_id = models.ForeignKey(Medi_Info, on_delete=models.CASCADE)
     diag_id = models.ForeignKey(Diagnosis, on_delete=models.CASCADE)
+    def diagDate(self):
+        return self.diag_id.diagDate
     surChartNum = models.CharField(max_length=50)
+    surRegi = models.CharField(max_length=50, default='')
+    surCount = models.IntegerField(default=1)
     surWriter = models.CharField(max_length=20)
     surDate = models.DateField()
     surNum = models.IntegerField()
@@ -32,6 +36,8 @@ class Surgery(models.Model) :
     surTube = models.BooleanField(default=False) #False-무 / True-유
     updateDate = models.DateTimeField(auto_now_add=True)
     surDocMaj=models.CharField(max_length=50, default="외과 전문의")
+    
+    
 
 class Sur_Comment(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
