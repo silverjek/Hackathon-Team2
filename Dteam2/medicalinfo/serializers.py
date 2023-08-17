@@ -22,10 +22,10 @@ class MediInfoSerializer(serializers.ModelSerializer):
     guardian = GuardianSerializer(many=True, read_only=True)
     class Meta:
         model = Medi_Info
-        fields = ['user_id','patName','patSex','patBirth',
+        fields = ['id','user_id','patName','patSex','patBirth',
                   'patAddress','patSSN','patBlood','patRH',
                   'patHeight','patWeight','patPhone','updateDate',
-                  'caution', 'fam_history', 'guardian']
+                  'caution', 'fam_history', 'guardian', 'doc', 'docMaj', 'Hospital']
         
 class InfoCommentSerializer(serializers.ModelSerializer):
     replies = serializers.SerializerMethodField()

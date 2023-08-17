@@ -12,7 +12,7 @@ class PrescriptionSerializer(serializers.ModelSerializer):
         model = Prescription
         fields = ['user_id','info_id','diag_id','prePharm',
                   'preAddress','preDate','preChem','updateDate',
-                  'medication']
+                  'medication', 'preDoc', 'preDocMaj','preHospital']
 
 class PreCommentSerializer(serializers.ModelSerializer):
     replies = serializers.SerializerMethodField()

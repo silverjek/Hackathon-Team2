@@ -31,6 +31,7 @@ class Surgery(models.Model) :
     surPost = models.TextField(null=False, blank=False, default='')
     surTube = models.BooleanField(default=False) #False-무 / True-유
     updateDate = models.DateTimeField(auto_now_add=True)
+    surDocMaj=models.CharField(max_length=50, default="외과 전문의")
 
 class Sur_Comment(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)

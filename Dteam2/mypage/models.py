@@ -21,3 +21,4 @@ class myPage(models.Model):
     
     def userFullName(self):
         return self.user.userFullName
+    
