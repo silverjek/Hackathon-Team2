@@ -8,12 +8,12 @@ class SurgerySerializer(serializers.ModelSerializer):
     mediinfo = MediInfoSerializer(many=True, read_only=True)
     class Meta:
         model = Surgery
-        fields = ['user_id','info_id','diag_id','surChartNum',
+        fields = ['id','user_id','info_id','diag_id','surChartNum',
                   'surWriter','surDate','surNum','surHospital',
                   'surField','surOper','surAssi','surAnesDoc',
                   'surName','surCode','surPreDiag','surPostDiag',
                   'surAnes','surEvent','surRemoval','surBloodTrans',
-                  'surPre','surDur','surPost','surTube',
+                  'surPre','surDur','surPost','surTube','updateDate',
                   'diagnosis','mediinfo']
         
 class SurCommentSerializer(serializers.ModelSerializer):

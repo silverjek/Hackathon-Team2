@@ -50,9 +50,10 @@ class CommentListView(views.APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class AddCommentView(views.APIView):
-    def post(self, request, format=None):
+    def post(self, request, pk, format=None):
         data = request.data.copy()  
         data['user_id'] = request.user.id
+        data['originPost'] = pk
         serializer = DiagCommentSerializer(data=data)
         
         if serializer.is_valid():

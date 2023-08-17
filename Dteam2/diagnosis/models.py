@@ -20,7 +20,9 @@ class Diagnosis(models.Model):
     diagIn = models.DateField()
     diagOut = models.DateField()
     diagUSage = models.CharField(max_length=50, blank=True, null=True)
-    diagETC = models.TextField(null=False, blank=False, default='') 
+    diagETC = models.TextField(null=False, blank=False, default='')
+    diagHospital = models.CharField(max_length=50, default="병원명")
+    diagDoc = models.CharField(max_length=20, default="의사이름")
     updateDate = models.DateTimeField(auto_now_add=True)
 
 class Diag_Comment(models.Model):
