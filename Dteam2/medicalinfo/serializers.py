@@ -22,7 +22,7 @@ class MediInfoSerializer(serializers.ModelSerializer):
     guardian = GuardianSerializer(many=True, read_only=True)
     class Meta:
         model = Medi_Info
-        fields = ['id','user_id','patName','patSex','patBirth','patAge'
+        fields = ['id','user_id','patName','patSex','patBirth','patAge',
                   'patAddress','patSSN','patBlood','patRH',
                   'patHeight','patWeight','patPhone','updateDate',
                   'caution', 'fam_history', 'guardian', 'doc', 'docMaj', 'Hospital']
