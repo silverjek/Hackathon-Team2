@@ -49,7 +49,24 @@ class LogoutView(views.APIView):
             return Response(status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class FileUploadView(views.APIView):
+    def post(self, request, pk, format=None):
+        try:
+            user = User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            return Response({'message': '해당 사용자가 존재하지 않습니다.'}, status=status.HTTP_404_NOT_FOUND)
 
+        if not user.userType:
+            return Response({'message': '의료인 사용자만 파일을 업로드할 수 있습니다.'}, status=status.HTTP_403_FORBIDDEN)
+
+        photo = request.FILES.get('photo')
+
+        if photo:
+            user.photo = photo
+            user.save()
+            return Response({'message': '사진이 성공적으로 저장되었습니다.'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': '사진 파일을 업로드해야 합니다.'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 

@@ -29,4 +29,4 @@ urlpatterns = [
     path('surgery/', include('surgery.urls')),
     path('landing/', include('landing.urls')),
     path('mypage/', include('mypage.urls')),
-]
+]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
