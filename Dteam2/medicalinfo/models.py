@@ -30,7 +30,7 @@ class Medi_Info(models.Model):
     patRH = models.CharField(max_length=5, choices=RH_CHOICES)
     patHeight = models.FloatField()
     patWeight = models.FloatField()
-    patPhone = PhoneNumberField(unique=True, null=False, blank=False)
+    patPhone = models.CharField(max_length=13, default='010-1234-5678')
     updateDate = models.DateTimeField(auto_now_add=True)
     doc=models.CharField(max_length=50, default='김멋사')           #갱신(수정)한 의사명
     docMaj=models.CharField(max_length=50, default='외과 전문의')     #갱신(수정)한 의사 전공
@@ -65,7 +65,7 @@ class Guardian(models.Model):
     info_id = models.ForeignKey(Medi_Info, on_delete=models.CASCADE)
     guaName = models.CharField(max_length=20)
     guaRelation = models.CharField(max_length=100)
-    guaPhone = PhoneNumberField(unique=True, null=False, blank=False)
+    guaPhone = models.CharField(max_length=13, default='010-1234-5678')
 
 class Info_Comment(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
