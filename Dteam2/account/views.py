@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth import authenticate
 from rest_framework import views
 from rest_framework.response import Response
 from .models import *
@@ -7,10 +8,14 @@ from django.contrib.auth import logout
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.status import *
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework.permissions import AllowAny
 
 # Create your views here.
 
 class SignUpView(views.APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         serializer=UserSerializer(data=request.data)
         if serializer.is_valid():
@@ -18,23 +23,39 @@ class SignUpView(views.APIView):
             return Response({'message':'회원가입 성공', 'data':serializer.data})
         return Response({'message':'회원가입 실패', 'error':serializer.errors})
 
-class LoginView(views.APIView):
+#로그인 함수
+class LoginView(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request):
+        user = get_object_or_404(User, id=request.user.id)
+        serializer = UserLoginSerializer(user)
+        return Response({'message': '현재 로그인된 유저 정보 조회 성공', 'data': serializer.data}, status=HTTP_200_OK)
+
     def post(self, request):
-        serializer=UserLoginSerializer(data=request.data)
-
-        if serializer.is_valid():
-            username = serializer.validated_data['username']
-            password = serializer.validated_data['password']
-
-            try:
-                user = User.objects.get(username=username)
-                if user.password == password:
-                    return Response({'message': '로그인 성공', 'data': serializer.data})
-                else:
-                    return Response({'message': '로그인 실패', 'non_field_errors': ['잘못된 비밀번호입니다.']}, status=status.HTTP_401_UNAUTHORIZED)
-            except User.DoesNotExist:
-                return Response({'message': '로그인 실패', 'non_field_errors': ['존재하지 않는 아이디입니다.']}, status=status.HTTP_401_UNAUTHORIZED)
-        return Response({'message': '로그인 실패', 'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        user = authenticate(
+            username=request.data.get("username"), password=request.data.get("password")
+        )
+        if user is not None:
+            serializer = UserLoginSerializer(user)
+            token = TokenObtainPairSerializer.get_token(user)
+            refresh_token = str(token)
+            access_token = str(token.access_token)
+            res = Response(
+                {
+                    'message': '로그인 성공',
+                    "user": serializer.data,
+                    "token": {
+                        "access": access_token,
+                        "refresh": refresh_token,
+                    },
+                },
+                status=status.HTTP_200_OK,
+            )
+            res.set_cookie("access", access_token, httponly=True)
+            res.set_cookie("refresh", refresh_token, httponly=True)
+            return res
+        else:
+            return Response({'message': '로그인 실패'}, status=status.HTTP_400_BAD_REQUEST)
     
 
 from rest_framework import views, status

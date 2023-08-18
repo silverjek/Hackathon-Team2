@@ -37,7 +37,10 @@ class UserLoginSerializer(serializers.Serializer):
     username=serializers.CharField(max_length=20)
     password=serializers.CharField(max_length=20, write_only=True)
     userType=serializers.BooleanField(default=True)
-
+    class Meta:
+        model=User
+        fields=['id', 'username', 'password', 'userType']
+        
     def validate(self, data):
         username=data.get("username", None)
         password=data.get("password", None)
